@@ -50,5 +50,9 @@ dependencies {
     // Gson Converter
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
+    // Glide Image Download
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    /// StackLayoutManager
+    implementation("com.littlemango:stacklayoutmanager:1.0.5")
 }
