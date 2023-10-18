@@ -12,14 +12,21 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView : RecyclerView
     lateinit var adapter : NewsAdapter
+    var articles = mutableListOf<Article>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         recyclerView = findViewById(R.id.newsList)
 
-//        val songs = listOf("Hell,", "Muhsan", "List", "Life", "Qunation")
+        adapter = NewsAdapter(this@MainActivity, articles)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
 
+
+
+//        val songs = listOf("Hell,", "Muhsan", "List", "Life", "Qunation")
         /*val songsObject = mutableListOf<Song>()
         songsObject.add(Song("Hello","Just the Description"))
         songsObject.add(Song("Hello","Just the Description"))
@@ -43,10 +50,9 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call<News>, response: Response<News>) {
                 val news = response.body()
                 if (news != null){
-                    Log.d("MUHSANTECH", news.toString())
-                    adapter = NewsAdapter(this@MainActivity, news.articles)
-                   recyclerView.adapter = adapter
-                   recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+                    //Log.d("MUHSANTECH", news.toString())
+                    articles.addAll(news.articles)
+                    adapter.notifyDataSetChanged()
                 }
             }
 
