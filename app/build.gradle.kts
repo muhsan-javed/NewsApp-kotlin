@@ -54,5 +54,6 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
     /// StackLayoutManager
-    implementation("com.littlemango:stacklayoutmanager:1.0.5")
+//    implementation("com.littlemango:stacklayoutmanager:1.0.5")
+    implementation("com.github.sparrow007:carouselrecyclerview:1.2.6")
 }
