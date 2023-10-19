@@ -1,16 +1,26 @@
 package com.muhsantech.newsappkotlin
 
+import android.graphics.Color
+import android.graphics.drawable.ClipDrawable.HORIZONTAL
+import android.icu.lang.UCharacter.VerticalOrientation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
+import android.view.View
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.jackandphantom.carouselrecyclerview.CarouselLayoutManager
+import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var recyclerView : RecyclerView
+    private lateinit var recyclerView : CarouselRecyclerview
+    private lateinit var container : ConstraintLayout
     lateinit var adapter : NewsAdapter
     var articles = mutableListOf<Article>()
 
@@ -19,12 +29,31 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         recyclerView = findViewById(R.id.newsList)
+        container = findViewById(R.id.container)
 
         adapter = NewsAdapter(this@MainActivity, articles)
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+        recyclerView.set3DItem(true)
+        recyclerView.setInfinite(true)
+        recyclerView.setAlpha(true)
+        recyclerView.setFlat(true)
+        recyclerView.setIsScrollingEnabled(true)
+        recyclerView.setOrientation(RecyclerView.SCROLL_AXIS_HORIZONTAL)
 
+        val carouselLayoutManager = recyclerView.getCarouselLayoutManager()
+        //val currentlyCenterPosition = recyclerView.getSelectedPosition()
 
+//        recyclerView.setItemSelectListener(object : CarouselLayoutManager.OnSelected {
+//            override fun onItemSelected(position: Int) {
+//                //Cente item
+//               if (currentlyCenterPosition != position){
+//                   container.setBackgroundColor(Color.parseColor(ColorPicker.getColor()))
+//               }
+//
+//            }
+//        })
+
+        recyclerView.layoutManager = carouselLayoutManager
 
 //        val songs = listOf("Hell,", "Muhsan", "List", "Life", "Qunation")
         /*val songsObject = mutableListOf<Song>()
@@ -62,4 +91,5 @@ class MainActivity : AppCompatActivity() {
 
         })
     }
+
 }
