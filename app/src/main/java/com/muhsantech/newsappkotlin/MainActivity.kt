@@ -19,11 +19,14 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var recyclerView : CarouselRecyclerview
     private lateinit var container : ConstraintLayout
     lateinit var adapter : NewsAdapter
     var articles = mutableListOf<Article>()
-
+    var pageNumber = 1
+    var totalResult = -1
+    val TAG = "Main"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -41,19 +44,20 @@ class MainActivity : AppCompatActivity() {
         recyclerView.setOrientation(RecyclerView.SCROLL_AXIS_HORIZONTAL)
 
         val carouselLayoutManager = recyclerView.getCarouselLayoutManager()
-        //val currentlyCenterPosition = recyclerView.getSelectedPosition()
+        val currentlyCenterPosition = recyclerView.getSelectedPosition()
 
-//        recyclerView.setItemSelectListener(object : CarouselLayoutManager.OnSelected {
-//            override fun onItemSelected(position: Int) {
-//                //Cente item
-//               if (currentlyCenterPosition != position){
-//                   container.setBackgroundColor(Color.parseColor(ColorPicker.getColor()))
-//               }
-//
-//            }
-//        })
+        recyclerView.setItemSelectListener(object : CarouselLayoutManager.OnSelected {
+            override fun onItemSelected(position: Int) {
+                Log.d(TAG, "First Visible Item - ${carouselLayoutManager.getFirstVisiblePosition()}")
+                Log.d(TAG, "Total Count - ${carouselLayoutManager.itemCount}")
+                if (totalResult > carouselLayoutManager.itemCount && carouselLayoutManager.getFirstVisiblePosition() >= carouselLayoutManager.itemCount -5){
+                    //pageNumber++
+                    //getNews()
+                }
+            }
+        })
 
-        recyclerView.layoutManager = carouselLayoutManager
+       // recyclerView.layoutManager = carouselLayoutManager
 
 //        val songs = listOf("Hell,", "Muhsan", "List", "Life", "Qunation")
         /*val songsObject = mutableListOf<Song>()
@@ -74,12 +78,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getNews() {
-        val news = NewsService.newsInstance.getHeadLines("in",1)
+        Log.d(TAG , "Request sent for $pageNumber")
+        val news = NewsService.newsInstance.getHeadLines("in",pageNumber)
         news.enqueue(object : Callback<News> {
             override fun onResponse(call: Call<News>, response: Response<News>) {
                 val news = response.body()
                 if (news != null){
                     //Log.d("MUHSANTECH", news.toString())
+                    totalResult = news.totalResults
                     articles.addAll(news.articles)
                     adapter.notifyDataSetChanged()
                 }
